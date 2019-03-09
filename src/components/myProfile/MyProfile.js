@@ -52,15 +52,16 @@ const ButtonContainer = styled.div`
  * @Class
  */
 class UserProfile extends React.Component {
+    uid =  localStorage.getItem("id");
     /**
      * If you don’t initialize the state and you don’t bind methods, you don’t need to implement a constructor for your React component.
      * The constructor for a React component is called before it is mounted (rendered).
      * In this case the initial state is defined in the constructor. The state is a JS object containing two fields: name and username
      * These fields are then handled in the onChange() methods in the resp. InputFields
      */
-    myProfile() {
-        fetch(`${getDomain()}/users`, { ///should it be /users or something else???
-            method: "POST", // why not PUT??
+    edit() {
+        fetch(`${getDomain()}/users/`+this.uid, {
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json"
             },
@@ -123,7 +124,7 @@ class UserProfile extends React.Component {
                                 disabled={!this.state.username || !this.state.password}
                                 width="50%"
                                 onClick={() => {
-                                    this.myProfile();
+                                    this.edit();
                                 }}
                             >
                                 Edit

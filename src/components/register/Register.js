@@ -77,7 +77,6 @@ class Register extends React.Component {
         this.state = {
             username: null,
             password: null,
-            name:null
         };
     }
     /**
@@ -93,16 +92,21 @@ class Register extends React.Component {
             body: JSON.stringify({
                 username: this.state.username,
                 password: this.state.password,
-               // dateOfBirth: this.state.dateOfBirth
             })
         })
-            .then(response => response.json())
-            .then(newUser => {
-                const user = new User(newUser``);
-                // store the token into the local storage
-                localStorage.setItem("token", user.token);
-                // user registration successfully worked --> navigate to the route /login in the LoginRouter???
-                this.props.history.push(`/login`); /// is it correct??
+            .then(response  => {
+                if (response.status === 201){
+                    //Modify message a bit
+                    alert(response.status +"/n Registration was successful. /n WELCOME!");
+                    const newUser = response.json();
+                    const user = new User(newUser);
+                    // store the token into the local storage
+                    localStorage.setItem("token", user.token);
+                    // user registration successfully worked --> navigate to the route /login in the LoginRouter???
+                    this.props.history.push(`/login`);
+                }else{
+                    alert(response.status + "/n Registration was not successful. /n The username is probably taken... /n Try a different one")
+                }
             })
             .catch(err => {
                 if (err.message.match(/Failed to fetch/)) {
@@ -154,10 +158,10 @@ class Register extends React.Component {
                         />
                         <ButtonContainer>
                             <Button
-                                disabled={!this.state.username || !this.state.name || !this.state.name}
+                                disabled={!this.state.username || !this.state.password}
                                 width="50%"
                                 onClick={() => {
-                                    this.register();  //Does it redirect me to the log in page???
+                                    this.register();
                                 }}
                             >
                                 Register
@@ -174,4 +178,4 @@ class Register extends React.Component {
  * You can get access to the history object's properties via the withRouter.
  * withRouter will pass updated match, location, and history props to the wrapped component whenever it renders.
  */
-export default withRouter(Register);
+export default withRouter(Register); //????????

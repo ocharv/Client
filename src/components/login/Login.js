@@ -83,12 +83,11 @@ class Login extends React.Component {
 
   /**
    * HTTP POST request is sent to the backend.
-   * If the request is successful, a new user is returned to the front-end and its token is stored in the localStorage.
+   * If the request is successful, the user is authenticated.
    */
   login() {
-    fetch(`${getDomain()}/users`, {
-      // i have to modify ot for log in
-      method: "GET",
+    fetch(`${getDomain()}/login`, {
+      method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
@@ -97,20 +96,26 @@ class Login extends React.Component {
         password: this.state.password
       })
     })
-      .then(response => response.json())
-      .then(returnedUser => {
-        const user = new User(returnedUser);
-        // store the token into the local storage
-        localStorage.setItem("token", user.token);
-        // user login successfully worked --> navigate to the route /game in the GameRouter
-        this.props.history.push(`/game`);
+      .then(response => {
+        if (response.status === 200){
+          alert(response.status + "/n User Authenticated. /n WELCOME BACK!");
+          const returnedUser = response.json();
+          const user = new User(returnedUser);
+          // store the token into the local storage
+          localStorage.setItem("token", user.token);
+          localStorage.setItem("id",user.id);
+          // user login successfully worked --> navigate to the route /game in the GameRouter
+          this.props.history.push(`/game`);
+        }else{
+          alert(response.status + "/n Invalid username or password.")
+        }
       })
       .catch(err => {
         if (err.message.match(/Failed to fetch/)) {
           alert("The server cannot be reached. Did you start it?");
         } else {
           alert(`Something went wrong during the login: ${err.message}`);
-        }// HANDLE BLANKS
+        }
       });
   }
 
