@@ -3,7 +3,7 @@
  */
 class User {
   constructor(data = {}) {
-    this.id = null;
+    this.id = null; //Math.random()
     this.name = null;
     this.username = null;
     this.token = null;

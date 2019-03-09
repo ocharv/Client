@@ -3,8 +3,9 @@ import styled from "styled-components";
 import { BaseContainer } from "../../helpers/layout";
 import { getDomain } from "../../helpers/getDomain";
 import User from "../shared/models/User";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import { Button } from "../../views/design/Button";
+
 
 const FormContainer = styled.div`
   margin-top: 2em;
@@ -72,26 +73,28 @@ class Login extends React.Component {
    * In this case the initial state is defined in the constructor. The state is a JS object containing two fields: name and username
    * These fields are then handled in the onChange() methods in the resp. InputFields
    */
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      name: null,
-      username: null
+      username: null,
+      password: null
     };
   }
+
   /**
    * HTTP POST request is sent to the backend.
    * If the request is successful, a new user is returned to the front-end and its token is stored in the localStorage.
    */
   login() {
     fetch(`${getDomain()}/users`, {
-      method: "POST",
+      // i have to modify ot for log in
+      method: "GET",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
         username: this.state.username,
-        name: this.state.name
+        password: this.state.password
       })
     })
       .then(response => response.json())
@@ -107,7 +110,7 @@ class Login extends React.Component {
           alert("The server cannot be reached. Did you start it?");
         } else {
           alert(`Something went wrong during the login: ${err.message}`);
-        }
+        }// HANDLE BLANKS
       });
   }
 
@@ -138,21 +141,21 @@ class Login extends React.Component {
           <Form>
             <Label>Username</Label>
             <InputField
-              placeholder="Enter here.."
+              placeholder="Enter your username"
               onChange={e => {
                 this.handleInputChange("username", e.target.value);
               }}
             />
-            <Label>Name</Label>
+            <Label>Password</Label>
             <InputField
-              placeholder="Enter here.."
+              placeholder="Enter your password"
               onChange={e => {
-                this.handleInputChange("name", e.target.value);
+                this.handleInputChange("password", e.target.value);
               }}
             />
             <ButtonContainer>
               <Button
-                disabled={!this.state.username || !this.state.name}
+                disabled={!this.state.username || !this.state.password}
                 width="50%"
                 onClick={() => {
                   this.login();
@@ -161,6 +164,16 @@ class Login extends React.Component {
                 Login
               </Button>
             </ButtonContainer>
+            <p align="center">Not registered yet?</p>
+            <Link to={"/register"}>
+            <ButtonContainer>
+              <Button
+                  width="50%"
+              >
+                Register
+              </Button>
+            </ButtonContainer>
+            </Link>
           </Form>
         </FormContainer>
       </BaseContainer>
