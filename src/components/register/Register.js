@@ -105,7 +105,7 @@ class Register extends React.Component {
                     // user registration successfully worked --> navigate to the route /login in the LoginRouter???
                     this.props.history.push(`/login`);
                 }else{
-                    alert(response.status + "/n Registration was not successful. /n The username is probably taken... /n Try a different one")
+                    alert(response.status + "/n Registration was not successful. The username is probably taken...Try a different one")
                 }
             })
             .catch(err => {

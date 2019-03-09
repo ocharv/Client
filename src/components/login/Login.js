@@ -98,7 +98,7 @@ class Login extends React.Component {
     })
       .then(response => {
         if (response.status === 200){
-          alert(response.status + "/n User Authenticated. /n WELCOME BACK!");
+          alert(response.status + "/n User Authenticated. WELCOME BACK!");
           const returnedUser = response.json();
           const user = new User(returnedUser);
           // store the token into the local storage
