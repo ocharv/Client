@@ -51,8 +51,8 @@ const ButtonContainer = styled.div`
  * https://reactjs.org/docs/react-component.html
  * @Class
  */
-class UserProfile extends React.Component {
-    uid =  localStorage.getItem("id");
+class MyProfile extends React.Component {
+   // uid =  localStorage.getItem("id");  +this.uid
     /**
      * If you don’t initialize the state and you don’t bind methods, you don’t need to implement a constructor for your React component.
      * The constructor for a React component is called before it is mounted (rendered).
@@ -60,18 +60,19 @@ class UserProfile extends React.Component {
      * These fields are then handled in the onChange() methods in the resp. InputFields
      */
     edit() {
-        fetch(`${getDomain()}/users/`+this.uid, {
+        fetch(`${getDomain()}/users/`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
                 username: this.state.username,
-                password: this.state.password,
                 name: this.state.name,
-                dateOfBirth: this.state.dateOfBirth
+                dateOfBirth: this.state.dateOfBirth,
+                status: this.state.status,
+                creationDate: this.state.creationDate
             })
-        })
+        })  // NEEDS MODIFICATION ALL OVER
             .then(response => response.json()) // NEED TO FIX THAT!!!
             .then(newUser => {
                 const user = new User(newUser``);
@@ -118,7 +119,7 @@ class UserProfile extends React.Component {
 
                         <Label>Creation Date:</Label>
 
-                        <Label>Birth Date:</Label>
+                        <Label>Date of Birth:</Label>
                         <ButtonContainer>
                             <Button
                                 disabled={!this.state.username || !this.state.password}
@@ -145,9 +146,7 @@ class UserProfile extends React.Component {
     }
 }
 
-function MyProfile() {
 
-}
 
 /**
  * You can get access to the history object's properties via the withRouter.

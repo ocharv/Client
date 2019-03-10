@@ -169,16 +169,17 @@ class Login extends React.Component {
                 Login
               </Button>
             </ButtonContainer>
-            <p align="center">Not registered yet?</p>
-            <Link to={"/register"}>
+            <h3 align="center">Not registered yet?</h3>
             <ButtonContainer>
               <Button
                   width="50%"
+                  onClick={() => {
+                    this.props.history.push("/register");
+                  }}
               >
                 Register
               </Button>
             </ButtonContainer>
-            </Link>
           </Form>
         </FormContainer>
       </BaseContainer>
