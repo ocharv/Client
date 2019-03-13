@@ -51,9 +51,10 @@ const Header = props => {
     <Container height={props.height}>
         <Title>SoPra FS19 rocks with React!</Title>
         <ReactLogo width={60} height={60} />
-        <Body>
+        {/*A BIT HARD TO MAKE IT WORK. */}
+        {/*<Body>
             <A href="/myProfile">My Profile</A>
-        </Body>
+        </Body>*/}
     </Container>
 
   );

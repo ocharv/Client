@@ -6,10 +6,10 @@ import { LoginGuard } from "../routeProtectors/LoginGuard";
 import Login from "../../login/Login";
 import {RegisterGuard} from "../routeProtectors/RegisterGuard";
 import Register from "../../register/Register"
+import {UserProfileGuard} from "../routeProtectors/UserProfileGuard";
+import UserProfile from "../../userProfile/UserProfile"
 import {MyProfileGuard} from "../routeProtectors/MyProfileGuard";
 import MyProfile from "../../myProfile/MyProfile";
-import {UserProfileGuard} from "../routeProtectors/UserProfileGuard";
-import UserProfile from "../../myProfile/MyProfile";
 
 
 /**
@@ -54,21 +54,21 @@ class AppRouter extends React.Component {
                   )}
               />
               <Route
-                  path="/myProfile"
-                  exact
-                  render={() => (
-                      <MyProfileGuard>
-                          <MyProfile />
-                      </MyProfileGuard>
-                  )}
-              />
-              <Route
-                  path="/userProfile" // path="/userProfile/:id" or path="/:id" component={Child}"
+                  path="/userProfile/:id" //or path="/:id" component={Child}"
                   exact
                   render={() => (
                       <UserProfileGuard>
                           <UserProfile />
                       </UserProfileGuard>
+                  )}
+              />
+              <Route
+                  path="/userProfile/:id/MyProfile"
+                  exact
+                  render={() => (
+                      <MyProfileGuard>
+                          <MyProfile />
+                      </MyProfileGuard>
                   )}
               />
               <Route path="/" exact render={() => <Redirect to={"/login"} />} />

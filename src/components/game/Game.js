@@ -23,6 +23,13 @@ const PlayerContainer = styled.li`
   align-items: center;
   justify-content: center;
 `;
+const B = styled.button`
+  cursor: pointer;
+  background: inherit;
+  border: none;
+  color:white;
+`;
+
 
 class Game extends React.Component {
   constructor() {
@@ -31,10 +38,32 @@ class Game extends React.Component {
       users: null
     };
   }
-
+    //NEED TO FIX
   logout() {
-    localStorage.removeItem("token");
-    this.props.history.push("/login");
+      const status = response => {
+          if (response.status === 204) {
+              return Promise.resolve(response);
+          }
+          return Promise.reject(new Error(response.statusText));
+      };
+
+      localStorage.removeItem("token");
+      fetch(`${getDomain()}/logout`, {
+          method: "PUT",
+          headers: {
+              "Content-Type": "text/plain"
+              // since we only send the token
+          },
+          body: localStorage.getItem("token") })
+          // only send the token
+          .then(status)
+
+          .catch(err => {
+              console.log(err);
+              //alert("User status was not updated, something went wrong.")
+          });
+
+      this.props.history.push("/login");
   }
 
   componentDidMount() {
@@ -72,7 +101,15 @@ class Game extends React.Component {
               {this.state.users.map(user => {
                 return (
                   <PlayerContainer key={user.id}>
+                      <B
+                          onClick = {() =>{
+                              this.props.history.push({
+                                  pathname: "/UserProfile/"+user.id,
+                                  state:{user}
+                              })
+                          }}>
                     <Player user={user} />
+                      </B>
                   </PlayerContainer>
                 );
               })}

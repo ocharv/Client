@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import { withRouter} from "react-router-dom";
+
 
 const Container = styled.div`
   margin: 6px 0;
@@ -26,6 +28,11 @@ const Id = styled.div`
   margin-right: 10px;
   font-weight: bold;
 `;
+/*const B = styled.button`
+  cursor: pointer;
+  background: inherit;
+  border: none;
+`;*/
 
 /**
  * This is an example of a Functional and stateless component (View) in React. Functional components are not classes and thus don't handle internal state changes.
@@ -35,13 +42,23 @@ const Id = styled.div`
  * https://reactjs.org/docs/components-and-props.html
  * @FunctionalComponent
  */
-const Player = ({ user }) => {
+const Player = ({props, user }) => {
   return (
     <Container>
-      <Name>{user.name}</Name> <UserName>{user.username}</UserName>
+        <Name>{user.name}</Name>
+        {/*PROBLEM WITH props.history.push*/}
+       {/* <B
+        onClick = {() =>{
+            props.history.push({
+                pathname: "/UserProfile/"+user.id,
+                state:{user}
+            })
+        }}>*/}
+        <UserName>{user.username}</UserName>
+      {/*</B>*/}
       <Id>Id: {user.id}</Id>
     </Container>
   );
 };
 
-export default Player;
+export default withRouter(Player);

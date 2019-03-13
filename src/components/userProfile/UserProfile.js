@@ -1,11 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import { BaseContainer } from "../../helpers/layout";
-import { getDomain } from "../../helpers/getDomain";
-import Player from "../../views/Player";
-import { Spinner } from "../../views/design/Spinner";
 import { Button } from "../../views/design/Button";
 import { withRouter } from "react-router-dom";
+import UserContainer from "../../views/UserContainer";
 
 const Container = styled(BaseContainer)`
   color: white;
@@ -23,13 +21,19 @@ const PlayerContainer = styled.li`
   align-items: center;
   justify-content: center;
 `;
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+`;
 
 class UserProfile extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            users: null
+            user: props.location.state.user
         };
+        this.user = props.location.state.user;
     }
 
     /*logout() {
@@ -37,59 +41,39 @@ class UserProfile extends React.Component {
         this.props.history.push("/login");
     }*/
 
-    componentDidMount() {
-        // NEED TO REVIEW THIS !!!
-        const {handle} = this.props.match.params.id; // this.match.params.id
-        fetch(`${getDomain()}/users/${handle}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-            .then(response =>{
-                if(response.status === 200){
-                    alert(response.status+"n/ User was retrieved successfully.");
-                    const user = response.json();
-                    this.setState({ user });
-                }else{
-                    alert(response.status+"n/ There was a problem retrieving the user");
-                }
-            })
-            .catch(err => {
-                console.log(err);
-                alert("Something went wrong fetching the users: " + err);
-            });
-    }
-
     render() {
         return (
             <Container>
-                <h2>*placeholder*'s Profile Details</h2>
-                {!this.state.users ? (
-                    <Spinner />
-                ) : (
+                <h2>Profile Details</h2>
                     <div>
                         <Users>
-                            // PROBABLY NEEDS MODIFICATION!!!!
-                            {this.state.users.map(user => {
-                                return (
-                                    <PlayerContainer key={user.id}>
-                                        <Player user={user} />
-                                    </PlayerContainer>
-                                );
-                            })}
+                            <PlayerContainer key={this.state.user.id}>
+                                <UserContainer user={this.state.user} />
+                            </PlayerContainer>
                         </Users>
-                        <Button
-                            //disabled={this.state.id != LOGGED_IN_ID}
-                            width="100%"
-                            onClick={() => {
-                                this.props.history.push("/myProfile"); //PROBABLY NOT CORRECT
-                            }}
-                        >
-                            Edit
-                        </Button>
+                        <ButtonContainer>
+                            <Button
+                                //WHY NOT WITH ID
+                                disabled={this.state.user.token !== localStorage.getItem("token")}
+                                width="25%"
+                                onClick={() => {
+                                    this.props.history.push("/UserProfile/"+this.state.user.id+"/myProfile");
+                                }}
+                            >
+                                Edit
+                            </Button>
+                        </ButtonContainer>
+                        <ButtonContainer>
+                            <Button
+                                width="25%"
+                                onClick={() => {
+                                this.props.history.go(-1);
+                             }}
+                            >
+                                Back
+                            </Button>
+                        </ButtonContainer>
                     </div>
-                )}
             </Container>
         );
     }

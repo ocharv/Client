@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { BaseContainer } from "../../helpers/layout";
 import { getDomain } from "../../helpers/getDomain";
-import User from "../shared/models/User";
 import { withRouter, Link } from "react-router-dom";
 import { Button } from "../../views/design/Button";
 
@@ -73,11 +72,12 @@ class Login extends React.Component {
    * In this case the initial state is defined in the constructor. The state is a JS object containing two fields: name and username
    * These fields are then handled in the onChange() methods in the resp. InputFields
    */
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       username: null,
-      password: null
+      password: null,
+      user: null
     };
   }
 
@@ -86,6 +86,17 @@ class Login extends React.Component {
    * If the request is successful, the user is authenticated.
    */
   login() {
+    const status = response => {
+      if (response.status === 200) {
+        return Promise.resolve(response)
+        //alert(response.status + " User Authenticated. WELCOME BACK!");
+
+      }
+      return Promise.reject(new Error(response.statusText))
+      //alert(response.status + " Invalid username or password.");
+    };
+    const json = response => response.json();
+
     fetch(`${getDomain()}/login`, {
       method: "POST",
       headers: {
@@ -96,28 +107,25 @@ class Login extends React.Component {
         password: this.state.password
       })
     })
-      .then(response => {
-        if (response.status === 200){
-          alert(response.status + "/n User Authenticated. WELCOME BACK!");
-          const returnedUser = response.json();
-          const user = new User(returnedUser);
-          // store the token into the local storage
-          localStorage.setItem("token", user.token);
-          localStorage.setItem("id",user.id);
-          // user login successfully worked --> navigate to the route /game in the GameRouter
-          this.props.history.push(`/game`);
-        }else{
-          alert(response.status + "/n Invalid username or password.")
-        }
-      })
-      .catch(err => {
-        if (err.message.match(/Failed to fetch/)) {
-          alert("The server cannot be reached. Did you start it?");
-        } else {
-          alert(`Something went wrong during the login: ${err.message}`);
-        }
-      });
-  }
+        .then(status)
+        .then(json)
+        .then(data => {
+            this.setState({user:data});
+            localStorage.setItem("token", this.state.user.token);
+            localStorage.setItem("id", this.state.user.id);
+            alert(" User Authenticated. WELCOME BACK!");
+            console.log('Request succeeded with JSON response', data);
+            // user login successfully worked --> navigate to the route /game in the GameRouter
+            this.props.history.push(`/game`);
+        })
+        .catch(err => {
+          if (err.message.match(/Failed to fetch/)) {
+            alert("The server cannot be reached. Did you start it?");
+          } else {
+            alert(`Something went wrong during the login: ${err.message}`);
+          }
+        });
+    }
 
   /**
    *  Every time the user enters something in the input field, the state gets updated.
