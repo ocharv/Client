@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { BaseContainer } from "../../helpers/layout";
 import { getDomain } from "../../helpers/getDomain";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { Button } from "../../views/design/Button";
 
 
@@ -113,6 +113,7 @@ class Login extends React.Component {
             this.setState({user:data});
             localStorage.setItem("token", this.state.user.token);
             localStorage.setItem("id", this.state.user.id);
+            //localStorage.setItem("id", this.state.user.id);
             alert(" User Authenticated. WELCOME BACK!");
             console.log('Request succeeded with JSON response', data);
             // user login successfully worked --> navigate to the route /game in the GameRouter

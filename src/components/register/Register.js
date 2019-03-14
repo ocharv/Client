@@ -98,10 +98,6 @@ class Register extends React.Component {
                 if (response.status === 201){
                     //Modify message a bit
                     alert(response.status + " Registration was successful.WELCOME!");
-                    //const newUser = response.json();
-                    //const user = new User(newUser);
-                    // store the token into the local storage
-                    //localStorage.setItem("token", user.token);
                     // user registration successfully worked --> navigate to the route /login in the LoginRouter???
                     this.props.history.push(`/login`);
                 }else{

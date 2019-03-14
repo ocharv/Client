@@ -2,8 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { BaseContainer } from "../../helpers/layout";
 import { Button } from "../../views/design/Button";
-import { withRouter } from "react-router-dom";
 import UserContainer from "../../views/UserContainer";
+import {withRouter} from "react-router-dom";
 
 const Container = styled(BaseContainer)`
   color: white;
@@ -57,7 +57,9 @@ class UserProfile extends React.Component {
                                 disabled={this.state.user.token !== localStorage.getItem("token")}
                                 width="25%"
                                 onClick={() => {
-                                    this.props.history.push("/UserProfile/"+this.state.user.id+"/myProfile");
+                                    let directory = "/UserProfile/"+this.state.user.id+"/MyProfile";
+                                    let user = this.state.user;
+                                    this.props.history.push({pathname: directory, state:{user}});
                                 }}
                             >
                                 Edit

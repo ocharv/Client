@@ -38,7 +38,6 @@ class Game extends React.Component {
       users: null
     };
   }
-    //NEED TO FIX
   logout() {
       const status = response => {
           if (response.status === 204) {
@@ -46,31 +45,29 @@ class Game extends React.Component {
           }
           return Promise.reject(new Error(response.statusText));
       };
-
+      let token = localStorage.getItem("token");
       localStorage.removeItem("token");
       fetch(`${getDomain()}/logout`, {
           method: "PUT",
           headers: {
-              "Content-Type": "text/plain"
-              // since we only send the token
+              "Content-Type": "text/plain" // when i send the data as json something goes wrong.. maybe i need also id and username and that is why it doesn't work
           },
-          body: localStorage.getItem("token") })
-          // only send the token
+          body: token //localStorage.getItem("token")
+      })
           .then(status)
-
           .catch(err => {
               console.log(err);
-              //alert("User status was not updated, something went wrong.")
           });
 
       this.props.history.push("/login");
-  }
+  };
 
   componentDidMount() {
     fetch(`${getDomain()}/users`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+          "Token": localStorage.getItem("token")
       }
     })
       .then(response => response.json())
