@@ -78,14 +78,16 @@ class MyProfile extends React.Component {
             }
             return Promise.reject(new Error(response.statusText));
         };
+        //save the token in a temp so i can use it after i remove it from local storage
         let token = localStorage.getItem("token");
         localStorage.removeItem("token");
         fetch(`${getDomain()}/logout`, {
             method: "PUT",
             headers: {
-                "Content-Type": "text/plain" // when i send the data as json something goes wrong.. maybe i need also id and username and that is why it doesn't work
+                // when i send the data as json something goes wrong.. maybe i need also id and username and that is why it doesn't work
+                "Content-Type": "text/plain"
             },
-            body: token //localStorage.getItem("token")
+            body: token
         })
             .then(status)
             .catch(err => {
@@ -102,9 +104,11 @@ class MyProfile extends React.Component {
     innerFetch(){
         const status = response => {
             if (response.status === 200) {
+                alert("success");
                 return Promise.resolve(response);
             }
-            return Promise.reject(new Error(response.statusText))
+            alert("fail");
+            return Promise.reject(new Error(response.statusText));
         };
 
         const json = response => response.json();
@@ -121,8 +125,9 @@ class MyProfile extends React.Component {
             .then(data => {
                 this.setState({user: data});
                 //let instead of "const" because this way it can not be accessed from outside the block
-                let user = this.user;
-                this.props.history.push({pathname: `/userProfile/` + this.user.id, state: {user} })
+                //let user = this.user;
+                //let id= this.user.id;
+                //this.props.history.push({pathname: `/userProfile/` + this.user.id, state: {user} })
             })
             .catch(err => {
                 alert(`Problem while getting the new data: ${err.message}`);
@@ -146,7 +151,7 @@ class MyProfile extends React.Component {
             body:JSON.stringify({
                 id: localStorage.getItem("id"),
                 username: this.state.username,
-                birthdayDate: this.state.dateOfBirth,
+                dateOfBirth: this.state.dateOfBirth,
                 name: this.state.name
             })
         })
@@ -169,9 +174,8 @@ class MyProfile extends React.Component {
         }else{
             return false;
         }
-
-
     }
+
     render() {
         let bday = this.state.dateOfBirth;
         let uname = this.state.username;
@@ -186,21 +190,21 @@ class MyProfile extends React.Component {
                         <Title>Updating Profile..</Title>
                         <Label>Username: </Label>
                         <InputField
-                            placeholder="Update your username here"
+                            placeholder="This field is mandatory"
                             onChange={e => {
                                 this.handleInputChange("username", e.target.value);
                             }}
                         />
                         <Label>Date of Birth: </Label>
                         <InputField
-                            placeholder="DD/MM/YYYY"
+                            placeholder="This field is optional. Use the following format: DD/MM/YYYY"
                             onChange={e => {
                                 this.handleInputChange("dateOfBirth", e.target.value);
                             }}
                         />
                         <Label>Name: </Label>
                         <InputField
-                            placeholder="Update your name here"
+                            placeholder="This field is optional"
                             onChange={e => {
                                 this.handleInputChange("name", e.target.value);
                             }}
@@ -214,7 +218,10 @@ class MyProfile extends React.Component {
                                 //|| !(token === localStorage.getItem("token"))
                                 }
                                 onClick={() => {
-                                    this.save()
+                                    this.save();
+                                    let user = this.state.user;
+                                    //let directory = "/UserProfile/"+user.id;
+                                    this.props.history.push({pathname: "/UserProfile/"+this.user.id, state:{user}});
                                 }}
                             >
                                 Save

@@ -34,6 +34,7 @@ class UserProfile extends React.Component {
             user: props.location.state.user
         };
         this.user = props.location.state.user;
+        this.id = localStorage.getItem("id");
     }
 
     /*logout() {
@@ -41,20 +42,23 @@ class UserProfile extends React.Component {
         this.props.history.push("/login");
     }*/
 
+
     render() {
+        // console.log(this.user.token);
+        // console.log(localStorage.getItem("token"));
         return (
             <Container>
                 <h2>Profile Details</h2>
                     <div>
                         <Users>
-                            <PlayerContainer key={this.state.user.id}>
+                            <PlayerContainer key={this.id}>
                                 <UserContainer user={this.state.user} />
                             </PlayerContainer>
                         </Users>
                         <ButtonContainer>
                             <Button
                                 //WHY NOT WITH ID
-                                disabled={this.state.user.token !== localStorage.getItem("token")}
+                                disabled={this.user ? this.user.token !== localStorage.getItem("token") : false}
                                 width="25%"
                                 onClick={() => {
                                     let directory = "/UserProfile/"+this.state.user.id+"/MyProfile";

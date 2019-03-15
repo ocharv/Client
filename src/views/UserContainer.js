@@ -3,16 +3,6 @@ import React from "react";
 import {BaseContainer} from "../helpers/layout";
 
 
-const Container2 = styled.div`
-  margin: 6px 0;
-  width: 400px;
-  height:400px;
-  padding: 10px;
-  border-radius: 6px;
-  display: inline;
-  align-items: center;
-  border: 1px solid #ffffff26;
-`;
 const FormContainer = styled.div`
   margin-top: 2em;
   display: flex;

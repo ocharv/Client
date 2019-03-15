@@ -22,7 +22,7 @@ const Title = styled.h1`
   color: white;
   text-align: center;
 `;
-const Body = styled.body `
+/*const Body = styled.body `
     margin: 0;
     font-family: Arial,serif;
 `;
@@ -33,7 +33,7 @@ const A = styled.a `
     padding: 14px 16px;
     text-decoration: none;
     font-size: 17px;
-`;
+`;*/
 
 
 
